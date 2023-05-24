@@ -1,7 +1,7 @@
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import org.w3c.dom.ls.LSOutput;
+
+import javax.xml.namespace.QName;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -44,6 +44,19 @@ public class Main {
         Optional<Person> min =  personList.stream()
                 .min(Comparator.comparing(Person::getAge));
         System.out.println(min);
+
+//        group
+        Map<Gender, List<Person>> genderListMap =  personList.stream()
+                .collect(Collectors.groupingBy(Person::getGender));
+        genderListMap.forEach((gender, person) -> {
+            System.out.println(gender);
+            person.forEach(System.out::println);
+        });
+        Optional<String> olderstFemale =  personList.stream()
+                .filter(person -> person.getGender().equals(Gender.FEMALE))
+                .max(Comparator.comparing(Person::getAge))
+                .map(Person::getName);
+        olderstFemale.ifPresent(name -> System.out.println(name));
 
     }
     public static List<Person> getPersonList(){
